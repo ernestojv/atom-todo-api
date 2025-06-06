@@ -1,10 +1,17 @@
 import * as admin from 'firebase-admin';
+import dotenv from 'dotenv';
 
-import { ServiceAccount } from "firebase-admin";
-const serviceAccount = require("../keys/serviceAcoountKey.json") as ServiceAccount;
+dotenv.config();
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+// Configurar Firebase Admin desde las variables de entorno
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }),
+  });
+}
 
 export const firestore = admin.firestore();
