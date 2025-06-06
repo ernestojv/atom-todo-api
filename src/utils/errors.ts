@@ -6,4 +6,8 @@ export class AppErrors {
         return Boom.internal(`Error en Firestore durante ${operation}`);
     }
 
+    static validationError(message: string) {
+        return Boom.badRequest(`Error de validación: ${message}`);
+    }
+
 }
