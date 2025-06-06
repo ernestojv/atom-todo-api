@@ -14,4 +14,18 @@ export class AppErrors {
         return Boom.tooManyRequests(message);
     }
 
+    static requiredField(field: string) {
+        return Boom.badRequest(`El campo ${field} es requerido`);
+    }
+
+    static invalidEmail() {
+        return Boom.badRequest('El email proporcionado no es válido');
+    }
+
+    //Tasks
+
+    static taskNotFound(id: string) {
+        return Boom.notFound(`Tarea con ID ${id} no encontrada`);
+    }
+
 }

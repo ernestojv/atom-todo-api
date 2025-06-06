@@ -15,7 +15,10 @@ export const validate = (schema: Joi.ObjectSchema, property: 'body' | 'query' | 
       throw AppErrors.validationError(errorMessages);
     }
 
-    req[property] = value;
+    if (property === 'body') {
+      req[property] = value;
+    }
+
     next();
   };
 };
