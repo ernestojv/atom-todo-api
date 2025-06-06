@@ -1,9 +1,15 @@
 import express, { Request, Response } from 'express';
 import { firestore } from './config/firestore';
+
+import { corsMiddleware } from './middleware/cors.middleware';
+import { errorHandler } from './middleware/error.middleware';
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware básico
+
+app.use(corsMiddleware);
+
 app.use(express.json());
 
 // Ruta Hello World
@@ -44,6 +50,8 @@ app.get('/test-firestore', async (req, res) => {
     });
   }
 });
+
+app.use(errorHandler);
 
 // Iniciar servidor
 app.listen(PORT, () => {
