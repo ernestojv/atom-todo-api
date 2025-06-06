@@ -3,13 +3,16 @@ import { firestore } from './config/firestore';
 
 import { corsMiddleware } from './middleware/cors.middleware';
 import { errorHandler } from './middleware/error.middleware';
+import { generalRateLimit } from './middleware/rateLimit.middleware';
+import { basicSecurity } from './middleware/helmet.middleware';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 
 app.use(corsMiddleware);
-
+app.use(basicSecurity);
+app.use(generalRateLimit);
 app.use(express.json());
 
 // Ruta Hello World

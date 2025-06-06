@@ -10,4 +10,8 @@ export class AppErrors {
         return Boom.badRequest(`Error de validación: ${message}`);
     }
 
+    static tooManyRequests(message: string = 'Demasiadas solicitudes') {
+        return Boom.tooManyRequests(message);
+    }
+
 }
