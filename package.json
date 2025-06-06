@@ -20,9 +20,12 @@
   },
   "homepage": "https://github.com/ernestojv/atom-todo-api#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.4.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.30",
     "nodemon": "^3.1.10",
