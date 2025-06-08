@@ -3,7 +3,7 @@ import { AppErrors } from '../utils/errors';
 
 // Rate limit general para toda la API
 export const generalRateLimit = rateLimit({
-    windowMs: 15 * 60 * 1000,
+    windowMs: 5 * 60 * 1000,
     max: 100,
     message: {
         error: 'Demasiadas solicitudes desde esta IP, intenta de nuevo en 15 minutos.'
@@ -27,8 +27,8 @@ export const generalRateLimit = rateLimit({
 
 // Rate limit estricto para operaciones sensibles (crear, actualizar, eliminar)
 export const strictRateLimit = rateLimit({
-    windowMs: 10 * 60 * 1000,
-    max: 20,
+    windowMs: 5 * 60 * 1000,
+    max: 50,
     message: {
         error: 'Límite excedido para operaciones de escritura, intenta de nuevo en 10 minutos.'
     },
@@ -49,7 +49,7 @@ export const strictRateLimit = rateLimit({
 // Rate limit suave para operaciones de lectura
 export const readRateLimit = rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 50,
+    max: 100,
     message: {
         error: 'Límite excedido para consultas, intenta de nuevo en 5 minutos.'
     }

@@ -5,6 +5,7 @@ const corsOptions = {
     // Lista de dominios permitidos
     const allowedOrigins = [
       'http://localhost:4200',
+      'localhost:4200',
     ];
     
     if (!origin) return callback(null, true);
@@ -16,7 +17,7 @@ const corsOptions = {
     }
   },
   
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   
   allowedHeaders: [
     'Origin',
