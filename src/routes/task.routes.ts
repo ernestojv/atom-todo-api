@@ -10,6 +10,7 @@ import {
   taskParamsSchema
 } from '../schemas/task.schema';
 import { authMiddleware } from '../middleware/auth.middleware';
+import { validateTaskOwner } from '../middleware/taskOwner.middleware';
 
 const router = Router();
 const taskController = new TaskController();
@@ -30,6 +31,7 @@ router.get('/stats',
 
 router.get('/:id',
   authMiddleware,
+  validateTaskOwner,
   readRateLimit,
   validate(taskParamsSchema, 'params'),
   asyncHandler(taskController.getTaskById.bind(taskController))
@@ -44,6 +46,7 @@ router.post('/',
 
 router.put('/:id',
   authMiddleware,
+  validateTaskOwner,
   strictRateLimit,
   validate(taskParamsSchema, 'params'),
   validate(updateTaskSchema, 'body'),
@@ -52,6 +55,7 @@ router.put('/:id',
 
 router.delete('/:id',
   authMiddleware,
+  validateTaskOwner,
   strictRateLimit,
   validate(taskParamsSchema, 'params'),
   asyncHandler(taskController.deleteTask.bind(taskController))
@@ -59,6 +63,7 @@ router.delete('/:id',
 
 router.patch('/:id/in-progress',
   authMiddleware,
+  validateTaskOwner,
   strictRateLimit,
   validate(taskParamsSchema, 'params'),
   asyncHandler(taskController.moveToInProgress.bind(taskController))
@@ -66,6 +71,7 @@ router.patch('/:id/in-progress',
 
 router.patch('/:id/done',
   authMiddleware,
+  validateTaskOwner,
   strictRateLimit,
   validate(taskParamsSchema, 'params'),
   asyncHandler(taskController.markAsDone.bind(taskController))
@@ -73,6 +79,7 @@ router.patch('/:id/done',
 
 router.patch('/:id/todo',
   authMiddleware,
+  validateTaskOwner,
   strictRateLimit,
   validate(taskParamsSchema, 'params'),
   asyncHandler(taskController.moveBackToTodo.bind(taskController))
