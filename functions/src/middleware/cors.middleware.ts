@@ -4,8 +4,8 @@ const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
     // Lista de dominios permitidos
     const allowedOrigins = [
-      'https://ernestojv-atom-todo.firebaseapp.com/',
-      'https://ernestojv-atom-todo.firebaseapp.com',
+      'https://ernestojv-atom-todo.web.app.com/',
+      'https://ernestojv-atom-todo.web.app.com',
     ];
     
     if (!origin) return callback(null, true);
