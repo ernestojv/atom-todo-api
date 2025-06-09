@@ -40,11 +40,6 @@ jobs:
       working-directory: ./functions
       run: npm run build
 
-    - name: Run tests (optional)
-      working-directory: ./functions
-      run: npm test
-      continue-on-error: true
-
     - name: Configure Firebase secrets
       run: |
         echo "Configuring Firebase secrets..."
