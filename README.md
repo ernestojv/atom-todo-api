@@ -51,6 +51,14 @@
 - ✅ **Error handling** eficiente
 - ✅ **Logging** estructurado
 
+### 🧪 **Testing & Quality Assurance**
+- ✅ **Tests de integración** completos para todos los endpoints
+- ✅ **85.71% de coverage** total del código
+- ✅ **Tests unitarios** para lógica de negocio
+- ✅ **Firebase Emulator** para testing local
+- ✅ **Casos edge** y manejo de errores cubiertos
+- ✅ **Automatización de tests** con Jest
+
 ---
 
 ## 🛠️ Tecnologías Utilizadas
@@ -69,11 +77,13 @@
 - **Express Rate Limit** - Rate limiting
 - **Joi** - Validación de esquemas
 
-### **DevOps & Tools**
+### **Testing & DevOps**
+- **Jest** - Framework de testing
+- **Supertest** - Testing de APIs HTTP
+- **Firebase Emulator** - Entorno de testing
 - **GitHub Actions** - CI/CD automático
 - **Firebase CLI** - Deployment tools
 - **ESLint** - Linting de código
-- **Firebase Admin SDK** - Interacción con Firebase
 
 ---
 
@@ -130,6 +140,9 @@ npm --version   # 10.x.x
 
 # Firebase CLI
 npm install -g firebase-tools
+
+# Java 11+ para Firebase Emulator
+java --version  # 11.x.x o superior
 ```
 
 ### **⚡ Instalación Local**
@@ -164,6 +177,128 @@ NODE_ENV: "production"
 
 ---
 
+## 🧪 Testing
+
+### **📊 Coverage Report**
+El proyecto mantiene un **85.71% de coverage** general con los siguientes resultados por módulo:
+
+#### **Coverage por Entidad:**
+- **🔐 AUTH**: ~95.4%
+
+- **👤 USER**: ~91.6%
+
+- **📋 TASK**: ~91.3%
+
+### **🚀 Configuración de Testing**
+
+#### **1. Preparar Firebase Emulator**
+```bash
+# Crear firebase.json en la raíz (si no existe)
+{
+  "emulators": {
+    "firestore": {
+      "port": 8080
+    },
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    }
+  }
+}
+
+# Inicializar emulators
+firebase init emulators
+```
+
+#### **2. Ejecutar Tests**
+```bash
+# PASO 1: Levantar Firebase Emulator (terminal 1)
+firebase emulators:start --only firestore,auth
+
+# PASO 2: Ejecutar tests (terminal 2)
+cd functions
+
+# Tests de integración individuales
+npm test auth.integration.test.ts
+npm test user.integration.test.ts
+npm test task.integration.test.ts
+
+# Todos los tests
+npm test
+
+# Tests con coverage detallado
+npm run test:coverage
+
+# Tests en modo watch
+npm run test:watch
+```
+
+### **🔬 Tipos de Tests**
+
+#### **Tests de Integración**
+- ✅ **auth.integration.test.ts** - Autenticación completa
+  - Login con creación de usuarios
+  - Verificación y refresh de tokens
+  - Casos edge y manejo de errores
+  - Validaciones de seguridad
+
+- ✅ **user.integration.test.ts** - Gestión de usuarios
+  - CRUD completo de usuarios
+  - Activación/desactivación
+  - Estadísticas y consultas
+  - Validaciones de entrada
+
+- ✅ **task.integration.test.ts** - Gestión de tareas
+  - CRUD con autenticación
+  - Cambios de estado
+  - Validación de propietario
+  - Filtros y estadísticas
+
+#### **Características de Testing**
+- 🔄 **Datos únicos** por test para evitar conflictos
+- 🧹 **Auto-limpieza** de datos entre tests
+- 🔒 **Testing de autenticación** end-to-end
+- 🛡️ **Casos edge** y manejo de errores
+- ⚡ **Firebase Emulator** para testing local
+
+### **📋 Scripts de Testing**
+```bash
+# Testing básico
+npm test                     # Ejecutar todos los tests
+npm run test:auth           # Solo tests de autenticación
+npm run test:user           # Solo tests de usuarios
+npm run test:task           # Solo tests de tareas
+
+# Coverage y análisis
+npm run test:coverage       # Coverage detallado
+npm run test:watch          # Modo watch para desarrollo
+npm run test:ci             # Tests para CI/CD
+
+# Debugging
+npm run test:debug          # Tests con debugging
+npm run test:verbose        # Output detallado
+```
+
+### **🚨 Prerequisitos para Testing**
+1. **Firebase Emulator** debe estar corriendo
+2. **Node.js 20+** instalado
+3. **Java 11+** para el emulador
+4. **Variables de entorno** configuradas
+
+### **📈 Métricas de Calidad**
+```bash
+# Generar reporte de coverage HTML
+npm run test:coverage:html
+
+# Ver archivo de coverage
+open coverage/lcov-report/index.html
+```
+
+---
+
 ## 📱 Scripts Disponibles
 
 ```bash
@@ -178,6 +313,12 @@ npm run build:watch      # Compilar en modo watch
 # Deploy
 npm run deploy           # Deploy a Firebase Functions
 firebase deploy --only functions
+
+# Testing
+npm test                 # Ejecutar todos los tests
+npm run test:coverage    # Tests con coverage
+npm run test:watch       # Tests en modo watch
+npm run test:integration # Solo tests de integración
 
 # Linting
 npm run lint             # Verificar código con ESLint
@@ -197,13 +338,17 @@ El proyecto incluye pipeline automático con **GitHub Actions**:
 
 1. **Push a `main`** → Deploy automático a Cloud Functions
 2. **Build TypeScript** → Compilación automática
-3. **Configuración de secrets** → Variables de entorno seguras
-4. **Deploy optimizado** para producción
+3. **Tests automáticos** → Validación de calidad
+4. **Configuración de secrets** → Variables de entorno seguras
+5. **Deploy optimizado** para producción
 
 ### **📦 Deploy Manual**
 ```bash
 # Build del proyecto
 npm run build
+
+# Ejecutar tests antes del deploy
+npm run test:coverage
 
 # Deploy con Firebase CLI
 firebase deploy --only functions
@@ -260,24 +405,7 @@ firebase use --add tu-project-id
 
 # Configurar secrets
 firebase functions:secrets:set JWT_SECRET
+
+# Configurar emulators para testing
+firebase init emulators
 ```
-
----
-
-## 🧪 Testing
-
-```bash
-# Ejecutar tests unitarios
-npm test
-
-# Tests con coverage
-npm run test:coverage
-
-# Tests de integración
-npm run test:integration
-
-# Linting de tests
-npm run lint:test
-```
-
-
