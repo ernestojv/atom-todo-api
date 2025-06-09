@@ -174,7 +174,7 @@ describe('TaskService', () => {
         });
 
         it('should move task to in progress', async () => {
-            const result = await taskService.moveToInProgress('task123');
+            await taskService.moveToInProgress('task123');
 
             expect(mockTaskRepository.update).toHaveBeenCalledWith(
                 'task123',
@@ -188,7 +188,7 @@ describe('TaskService', () => {
                 status: TaskStatus.DONE
             });
 
-            const result = await taskService.markAsDone('task123');
+            await taskService.markAsDone('task123');
 
             expect(mockTaskRepository.update).toHaveBeenCalledWith(
                 'task123',
@@ -202,7 +202,7 @@ describe('TaskService', () => {
                 status: TaskStatus.TODO
             });
 
-            const result = await taskService.moveBackToTodo('task123');
+            await taskService.moveBackToTodo('task123');
 
             expect(mockTaskRepository.update).toHaveBeenCalledWith(
                 'task123',
@@ -213,12 +213,6 @@ describe('TaskService', () => {
 
     describe('getTaskStats', () => {
         it('should return correct task statistics', async () => {
-            const tasks = [
-                { ...mockTask, status: TaskStatus.TODO },
-                { ...mockTask, id: 'task2', status: TaskStatus.IN_PROGRESS },
-                { ...mockTask, id: 'task3', status: TaskStatus.DONE },
-                { ...mockTask, id: 'task4', status: TaskStatus.DONE }
-            ];
             mockTaskRepository.getTaskStatsByUser.mockResolvedValue({
                 total: 4,
                 todo: 1,

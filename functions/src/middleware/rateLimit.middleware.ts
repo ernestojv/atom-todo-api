@@ -28,7 +28,7 @@ export const generalRateLimit = rateLimit({
 // Rate limit estricto para operaciones sensibles (crear, actualizar, eliminar)
 export const strictRateLimit = rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 50,
+    max: 100,
     message: {
         error: 'Límite excedido para operaciones de escritura, intenta de nuevo en 10 minutos.'
     },
