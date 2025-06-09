@@ -1,9 +1,22 @@
 import * as admin from 'firebase-admin';
 
-// Configuración para Cloud Functions
 if (!admin.apps.length) {
-  admin.initializeApp();
+  if (process.env.NODE_ENV === 'test') {
+    admin.initializeApp({
+      projectId: 'test-project'
+    });
+  } else {
+    admin.initializeApp();
+  }
 }
 
 export const db = admin.firestore();
 export const auth = admin.auth();
+
+if (process.env.NODE_ENV === 'test') {
+  const host = process.env.FIRESTORE_EMULATOR_HOST || 'localhost:8080';
+  db.settings({
+    host: host,
+    ssl: false
+  });
+}

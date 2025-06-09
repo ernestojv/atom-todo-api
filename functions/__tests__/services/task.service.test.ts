@@ -1,9 +1,9 @@
-import { TaskService } from '../../services/task.service';
-import { TaskRepository } from '../../repositories/task.repository';
-import { Task, TaskStatus } from '../../models/task.model';
-import { CreateTaskDto } from '../../dto/task.dto';
+import { TaskService } from '../../src/services/task.service';
+import { TaskRepository } from '../../src/repositories/task.repository';
+import { Task, TaskStatus } from '../../src/models/task.model';
+import { CreateTaskDto } from '../../src/dto/task.dto';
 
-jest.mock('../../repositories/task.repository');
+jest.mock('../../src/repositories/task.repository');
 
 describe('TaskService', () => {
     let taskService: TaskService;

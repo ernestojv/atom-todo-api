@@ -26,5 +26,5 @@ app.get('/', (req: Request, res: Response) => {
 routerApi(app);
 
 app.use(errorHandler);
-
+export { app };
 export const api = functions.https.onRequest(app);

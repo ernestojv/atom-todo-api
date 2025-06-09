@@ -1,9 +1,9 @@
-import { UserService } from '../../services/user.service';
-import { UserRepository } from '../../repositories/user.repository';
-import { User } from '../../models/user.model';
-import { CreateUserDto } from '../../dto/user.dto';
+import { UserService } from '../../src/services/user.service';
+import { UserRepository } from '../../src/repositories/user.repository';
+import { User } from '../../src/models/user.model';
+import { CreateUserDto } from '../../src/dto/user.dto';
 
-jest.mock('../../repositories/user.repository');
+jest.mock('../../src/repositories/user.repository');
 
 describe('UserService', () => {
   let userService: UserService;

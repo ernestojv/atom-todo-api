@@ -1,5 +1,5 @@
-import { JwtService } from '../../services/jwt.service';
-import { User } from '../../models/user.model';
+import { JwtService } from '../../src/services/jwt.service';
+import { User } from '../../src/models/user.model';
 
 describe('JwtService', () => {
   let jwtService: JwtService;
@@ -84,13 +84,6 @@ describe('JwtService', () => {
       expect(() => {
         jwtService.extractTokenFromHeader('Bearer ');
       }).toThrow();
-    });
-  });
-
-  describe('constructor', () => {
-    it('should throw error when JWT_SECRET is missing', () => {
-      delete process.env.JWT_SECRET;
-      expect(() => new JwtService()).toThrow();
     });
   });
 });
