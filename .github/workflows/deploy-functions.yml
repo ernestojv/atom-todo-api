@@ -1,0 +1,69 @@
+name: Deploy Cloud Functions
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'functions/**'
+      - '.github/workflows/deploy-functions.yml'
+  workflow_dispatch: # Permite ejecutar manualmente
+
+env:
+  NODE_VERSION: '20'
+  FIREBASE_PROJECT_ID: 'ernestojv-atom-todo'
+
+jobs:
+  deploy-functions:
+    name: Deploy to Cloud Functions
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: functions/package-lock.json
+
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
+
+    - name: Install functions dependencies
+      working-directory: ./functions
+      run: npm ci
+
+    - name: Build functions
+      working-directory: ./functions
+      run: npm run build
+
+    - name: Run tests (optional)
+      working-directory: ./functions
+      run: npm test
+      continue-on-error: true
+
+    - name: Configure Firebase secrets
+      run: |
+        echo "Configuring Firebase secrets..."
+        echo "${{ secrets.JWT_SECRET }}" | firebase functions:secrets:set JWT_SECRET --data-file=- --token=${{ secrets.FIREBASE_TOKEN }} --project=${{ env.FIREBASE_PROJECT_ID }}
+      continue-on-error: true
+
+    - name: Deploy Cloud Functions
+      working-directory: ./functions
+      run: |
+        firebase deploy --only functions --token=${{ secrets.FIREBASE_TOKEN }} --project=${{ env.FIREBASE_PROJECT_ID }}
+      env:
+        NODE_ENV: production
+        JWT_EXPIRES_IN: "24h"
+
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ ${{ job.status }} == 'success' ]; then
+          echo "✅ Cloud Functions deployed successfully!"
+        else
+          echo "❌ Cloud Functions deployment failed!"
+        fi
