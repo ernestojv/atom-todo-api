@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.taskRoutes = void 0;
+const express_1 = require("express");
+const task_controller_1 = require("../controllers/task.controller");
+const validation_middleware_1 = require("../middleware/validation.middleware");
+const asyncHandler_middleware_1 = require("../middleware/asyncHandler.middleware");
+const rateLimit_middleware_1 = require("../middleware/rateLimit.middleware");
+const task_schema_1 = require("../schemas/task.schema");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const taskOwner_middleware_1 = require("../middleware/taskOwner.middleware");
+const router = (0, express_1.Router)();
+exports.taskRoutes = router;
+const taskController = new task_controller_1.TaskController();
+router.get('/', auth_middleware_1.authMiddleware, rateLimit_middleware_1.readRateLimit, (0, validation_middleware_1.validate)(task_schema_1.getTasksQuerySchema, 'query'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.getTasks.bind(taskController)));
+router.get('/stats', auth_middleware_1.authMiddleware, rateLimit_middleware_1.readRateLimit, (0, validation_middleware_1.validate)(task_schema_1.getTasksQuerySchema, 'query'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.getTaskStats.bind(taskController)));
+router.get('/:id', auth_middleware_1.authMiddleware, taskOwner_middleware_1.validateTaskOwner, rateLimit_middleware_1.readRateLimit, (0, validation_middleware_1.validate)(task_schema_1.taskParamsSchema, 'params'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.getTaskById.bind(taskController)));
+router.post('/', auth_middleware_1.authMiddleware, rateLimit_middleware_1.strictRateLimit, (0, validation_middleware_1.validate)(task_schema_1.createTaskSchema, 'body'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.createTask.bind(taskController)));
+router.put('/:id', auth_middleware_1.authMiddleware, taskOwner_middleware_1.validateTaskOwner, rateLimit_middleware_1.strictRateLimit, (0, validation_middleware_1.validate)(task_schema_1.taskParamsSchema, 'params'), (0, validation_middleware_1.validate)(task_schema_1.updateTaskSchema, 'body'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.updateTask.bind(taskController)));
+router.delete('/:id', auth_middleware_1.authMiddleware, taskOwner_middleware_1.validateTaskOwner, rateLimit_middleware_1.strictRateLimit, (0, validation_middleware_1.validate)(task_schema_1.taskParamsSchema, 'params'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.deleteTask.bind(taskController)));
+router.patch('/:id/in-progress', auth_middleware_1.authMiddleware, taskOwner_middleware_1.validateTaskOwner, rateLimit_middleware_1.strictRateLimit, (0, validation_middleware_1.validate)(task_schema_1.taskParamsSchema, 'params'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.moveToInProgress.bind(taskController)));
+router.patch('/:id/done', auth_middleware_1.authMiddleware, taskOwner_middleware_1.validateTaskOwner, rateLimit_middleware_1.strictRateLimit, (0, validation_middleware_1.validate)(task_schema_1.taskParamsSchema, 'params'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.markAsDone.bind(taskController)));
+router.patch('/:id/todo', auth_middleware_1.authMiddleware, taskOwner_middleware_1.validateTaskOwner, rateLimit_middleware_1.strictRateLimit, (0, validation_middleware_1.validate)(task_schema_1.taskParamsSchema, 'params'), (0, asyncHandler_middleware_1.asyncHandler)(taskController.moveBackToTodo.bind(taskController)));
+//# sourceMappingURL=task.routes.js.map
